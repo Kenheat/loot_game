@@ -18,7 +18,7 @@ def main():
             help()
         
         if text == "I":
-            print(f"Items: {bp.show_items()}")
+            bp.show_items()
         
         if text == "S":
             print(f"Backpack space: {bp.show_backpack_space()}")

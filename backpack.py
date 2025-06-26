@@ -1,12 +1,18 @@
+from items import *
+
 class Backpack():
     def __init__(self):
-        self.items = ["a", "b", "c"]
+        self.items = [Sword(), Sword(), Sword()]
         self.max_backpack_space = 5
         self.backpack_space = self.max_backpack_space - len(self.items)
     
     def show_items(self):
-        return self.items
-
+        print("Items:")
+        print("---------")
+        for item in self.items:
+            print(item)
+        print("---------")
+    
     def show_backpack_space(self):
         return self.backpack_space
     
