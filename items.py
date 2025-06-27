@@ -7,7 +7,7 @@ class Sword():
         self.name = self.generate_name()
     
     def generate_name(self):
-        prefix = ["Greatsword", "Sword", "Broadsword", "Cutlass", "Shortsword", "Katana"]
+        prefix = ["Hatchion", "Sabre", "Broadsword", "Cutlass", "Claymate", "Katana"]
         middle = " of the "
         suffix = ["Boar", "Bear", "Tiger", "Monkey", "Eagle", "Crocodile"]
 
