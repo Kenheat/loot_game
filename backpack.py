@@ -2,30 +2,32 @@ from items import *
 
 class Backpack():
     def __init__(self):
-        self.items = [Sword(), Sword(), Sword()]
+        self.items = [Sword(), Sword(), Sword(), Sword(), Sword()]
         self.max_backpack_space = 5
-        self.backpack_space = self.max_backpack_space - len(self.items)
+        self.available_backpack_space = self.max_backpack_space - len(self.items)
     
     def show_items(self):
         print("Items:")
         print("---------")
+        item_index = 1
         for item in self.items:
-            print(item)
+            print(f"{item_index}. {item}")
+            item_index += 1
         print("---------")
     
-    def show_backpack_space(self):
-        return self.backpack_space
+    def show_available_backpack_space(self):
+        print(f"Available backpack space: {self.available_backpack_space}")
     
-    def remove_item(self, item):
+    def remove_item(self, item_number):
         if len(self.items) == 0:
             print("No items in backpack.")
             return
-        self.items.remove(item)
-        self.backpack_space += 1
+        del self.items[item_number - 1]
+        self.available_backpack_space += 1
     
     def add_item(self, item):
-        if self.backpack_space == 0:
-            print("No more space in the backpack.")
+        if self.available_backpack_space == 0:
+            print("No more available space in the backpack.")
             return
         self.items.append(item)
-        self.backpack_space -= 1
+        self.available_backpack_space -= 1
