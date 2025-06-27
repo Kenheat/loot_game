@@ -2,7 +2,7 @@ from items import *
 
 class Backpack():
     def __init__(self):
-        self.items = [Sword(), Sword(), Sword(), Sword(), Sword()]
+        self.items = []
         self.max_backpack_space = 5
         self.available_backpack_space = self.max_backpack_space - len(self.items)
     
@@ -22,6 +22,7 @@ class Backpack():
         if len(self.items) == 0:
             print("No items in backpack.")
             return
+        print(f"{self.items[item_number - 1]} removed from backpack.")
         del self.items[item_number - 1]
         self.available_backpack_space += 1
     
