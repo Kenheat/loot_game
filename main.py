@@ -9,27 +9,27 @@ def main():
     bp = Backpack()
 
     while True:
-        text = input("> ")
+        user_input = input("> ")
 
-        if text == "Exit":
+        if user_input == "Exit":
             return
         
-        if text == "Help":
+        if user_input == "Help":
             help()
         
-        if text == "I":
+        if user_input == "I":
             bp.show_items()
         
-        if text == "S":
-            print(f"Backpack space: {bp.show_backpack_space()}")
+        if user_input == "S":
+            bp.show_available_backpack_space()
 
-        if text == "A":
+        if user_input == "A":
             item_to_add = input("Item to add: ")
             bp.add_item(item_to_add)
 
-        if text == "R":
-            item_to_remove = input("Item to remove: ")
-            bp.remove_item(item_to_remove)
+        if user_input == "R":
+            item_number = int(input("Item to remove: "))
+            bp.remove_item(item_number)
 
 if __name__ == "__main__":
     main()
