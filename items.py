@@ -3,7 +3,6 @@ import random
 class Sword():
     def __init__(self):
         self.item_type = "Weapon"
-        self.damage_per_second = 3
         self.name = self.generate_name()
     
     def generate_name(self):
@@ -15,5 +14,20 @@ class Sword():
 
         return name
     
+    def __str__(self):
+        return self.name
+
+class Potion():
+    def __init__(self):
+        self.item_type = "Consumable"
+        self.name = self.generate_name()
+        
+    def generate_name(self):
+        potion_type = ["Health", "Mana", "Strength", "Stamina", "Agility", "Intelligence"]
+
+        name = potion_type[random.randrange(0, 6)] + " potion"
+
+        return name
+
     def __str__(self):
         return self.name
