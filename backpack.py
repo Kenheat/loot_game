@@ -1,5 +1,3 @@
-from items import *
-
 class Backpack():
     def __init__(self):
         self.items = []
@@ -7,13 +5,17 @@ class Backpack():
         self.available_backpack_space = self.max_backpack_space - len(self.items)
     
     def show_items(self):
-        print("Items:")
-        print("---------")
+        print("Items in backpack:\n")
         item_index = 1
-        for item in self.items:
-            print(f"{item_index}. {item}")
+        for i in range(5):
+            print(" ---")
+            try:
+                print(f"| {item_index} | {self.items[i]}")
+                print(" ---")
+            except:
+                print(f"| {item_index} | (Empty)")
+                print(" ---")
             item_index += 1
-        print("---------")
     
     def show_available_backpack_space(self):
         print(f"Available backpack space: {self.available_backpack_space}")
@@ -31,4 +33,5 @@ class Backpack():
             print("No more available space in the backpack.")
             return
         self.items.append(item)
+        print("Item stored in backpack.")
         self.available_backpack_space -= 1
