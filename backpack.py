@@ -3,9 +3,7 @@ class Backpack():
         self.empty = "(Empty)"
         self.items = {1: self.empty,
                       2: self.empty,
-                      3: self.empty,
-                      4: self.empty,
-                      5: self.empty}
+                      3: self.empty}
         self.max_backpack_space = len(self.items)
         self.available_backpack_space = len(self.items)
     
@@ -25,7 +23,7 @@ class Backpack():
         for item in self.items:
             if self.items[item] is self.empty:
                 empty_count += 1
-        if empty_count == 5:
+        if empty_count == len(self.items):
             print("\nNo items in backpack.\n")
             return
         
@@ -40,6 +38,25 @@ class Backpack():
             self.available_backpack_space += 1
         except:
             print("\nInvalid choice.\n")
+    
+    def move_item(self):
+        while True:
+            item_to_move = int(input("\nChoose item to move (item number).\n> "))
+            temp = self.items[item_to_move]
+            if self.items[item_to_move] is not self.empty:
+                destination = int(input(f"\nChoose where to move item {item_to_move} (slot number).\n> "))
+                if self.items[destination] is self.empty:
+                    self.items[destination] = self.items[item_to_move]
+                    self.items[item_to_move] = self.empty
+                    
+                    print(f"\n{temp} moved from slot {item_to_move} to slot {destination}.\n")
+                    return
+                else:
+                    print("\nItem already in selected slot.\n")
+                    return
+            else:
+                print("\nNo item in selected slot.\n")
+                return
     
     def add_item(self, looted_item):
         if self.available_backpack_space == 0:
@@ -65,16 +82,16 @@ class Backpack():
                 return
 
             # showing loot content
-            print("Loot:") 
+            print("\nLoot:\n") 
             for item in looted_items:
                 print(" ---")
                 print(f"| {item} | {looted_items[item]}")
                 print(" ---")
 
-            number_or_discard = input("Choose item to keep (item number) or discard all/rest of items (d).\n> ")
+            number_or_discard = input("\nChoose item to keep (item number) or discard all/rest of items (d).\n> ")
 
             if number_or_discard == "d":
-                print("Items discarded.")
+                print("\nItems discarded.\n")
                 return
             
             else:
