@@ -2,9 +2,7 @@ from backpack import *
 from game_actions import *
 
 def main():
-    print("Welcome to Loot Game!\n")
-    print('Type "E" to exit game.')
-    print('Type "H" for help menu.')
+    start_message()
 
     bp = Backpack()
 
@@ -32,6 +30,9 @@ def main():
             
             if looted_items:
                 bp.loot_to_add(looted_items)
+        
+        if user_input == "m":
+            bp.move_item()
 
 if __name__ == "__main__":
     main()
