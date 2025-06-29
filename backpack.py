@@ -57,6 +57,10 @@ class Backpack():
             else:
                 print("\nNo item in selected slot.\n")
                 return
+
+    # TODO
+    def replace_item(self):
+        pass
     
     def add_item(self, looted_item):
         if self.available_backpack_space == 0:
