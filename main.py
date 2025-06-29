@@ -2,38 +2,36 @@ from backpack import *
 from game_actions import *
 
 def main():
-    print("Welcome to Loot Game!")
-    print('Type "Exit" to exit game.')
-    print('Type "Help" for help menu')
+    print("Welcome to Loot Game!\n")
+    print('Type "E" to exit game.')
+    print('Type "H" for help menu.')
 
     bp = Backpack()
 
     while True:
         user_input = input("> ")
 
-        if user_input == "Exit":
+        if user_input == "E":
+            print("\nGoodbye!\n")
             return
         
-        if user_input == "Help":
+        if user_input == "H":
             help()
         
-        if user_input == "I":
+        if user_input == "i":
             bp.show_items()
         
-        if user_input == "S":
+        if user_input == "s":
             bp.show_available_backpack_space()
 
-        if user_input == "R":
-            item_number = int(input("Item to remove: \n> "))
-            bp.remove_item(item_number)
+        if user_input == "r":
+            bp.remove_item()
         
-        if user_input == "L":
-            looted_item = loot()
-            keep_or_discard = input("Keep (K) or discard (D) item? \n> ")
-            if keep_or_discard == "K":
-                bp.add_item(looted_item)
-            if keep_or_discard == "D":
-                print("Item discarded.")
+        if user_input == "l":
+            looted_items = loot()
+            
+            if looted_items:
+                bp.loot_to_add(looted_items)
 
 if __name__ == "__main__":
     main()
