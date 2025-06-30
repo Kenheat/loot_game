@@ -17,7 +17,7 @@ def main():
             help()
         
         if user_input == "i":
-            bp.show_items()
+            bp.show_items_backpack()
         
         if user_input == "s":
             bp.show_available_backpack_space()
