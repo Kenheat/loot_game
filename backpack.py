@@ -1,3 +1,5 @@
+import os
+
 class Backpack():
     def __init__(self):
         self.empty = "(Empty)"
@@ -7,7 +9,9 @@ class Backpack():
         self.max_backpack_space = len(self.items)
         self.available_backpack_space = len(self.items)
     
-    def show_items(self):
+    def show_items_backpack(self):
+        os.system("clear")
+
         print("\nItems in backpack:\n")
         for item in self.items:
             print(" ---")
@@ -19,11 +23,9 @@ class Backpack():
         print(f"Available backpack space: {self.available_backpack_space}")
     
     def remove_item(self):
-        empty_count = 0
-        for item in self.items:
-            if self.items[item] is self.empty:
-                empty_count += 1
-        if empty_count == len(self.items):
+        os.system("clear")
+
+        if self.empty_count(self.items) == len(self.items):
             print("\nNo items in backpack.\n")
             return
         
@@ -40,6 +42,9 @@ class Backpack():
             print("\nInvalid choice.\n")
     
     def move_item(self):
+        os.system("clear")
+        self.show_items_backpack()
+
         while True:
             item_to_move = int(input("\nChoose item to move (item number).\n> "))
             temp = self.items[item_to_move]
@@ -49,7 +54,9 @@ class Backpack():
                     self.items[destination] = self.items[item_to_move]
                     self.items[item_to_move] = self.empty
                     
+                    os.system("clear")
                     print(f"\n{temp} moved from slot {item_to_move} to slot {destination}.\n")
+                    self.show_items_backpack()
                     return
                 else:
                     print("\nItem already in selected slot.\n")
@@ -58,14 +65,12 @@ class Backpack():
                 print("\nNo item in selected slot.\n")
                 return
 
-    # TODO
-    def replace_item(self):
-        pass
+    # TODO refine
+    def replace_item(self, looted_items, item_to_replace, replacing_item):
+        self.items[item_to_replace] = looted_items[replacing_item]
+        looted_items[replacing_item] = self.empty
     
     def add_item(self, looted_item):
-        if self.available_backpack_space == 0:
-            print("\nNo more available space in the backpack.\n")
-            return
         for item in self.items:
             if self.items[item] is self.empty:
                 self.items[item] = looted_item
@@ -73,24 +78,43 @@ class Backpack():
                 self.available_backpack_space -= 1
                 return
 
-    def loot_to_add(self, looted_items):
-        # TODO: want the player to have the option of removing items from the backpack while looting
-        while True:
-            # problem(?): if the backpack is full, the option to loot is removed
-            if self.available_backpack_space == 0:
-                print("No more available space in the backpack.")
-                return
+    def show_items_loot(self, looted_items):
+        print("\nLoot:\n") 
+        for item in looted_items:
+            print(" ---")
+            print(f"/ {item} / {looted_items[item]}")
+            print(" ---")
+        print("")
 
-            if len(looted_items) == 0:
+    def loot_to_add(self, looted_items):
+        while True:
+            if (self.available_backpack_space == 0) and (self.empty_count(looted_items) != len(looted_items)):
+                print("No more available space in the backpack.")
+                
+                # TODO refine
+                replace_item = input("Replace item in backback with looted item?\ny/n> ")
+                if replace_item == "y":
+                    os.system("clear")
+                    self.show_items_backpack()
+                    item_to_replace = int(input("Item to replace:\n> "))
+
+                    os.system("clear")
+                    self.show_items_loot(looted_items)
+                    replacing_item = int(input("Item to replace with:\n> "))
+
+                    self.replace_item(looted_items, item_to_replace, replacing_item)
+
+                if replace_item == "n":
+                    print("Loot discarded.")
+                    return
+
+            if self.empty_count(looted_items) == len(looted_items):
                 print("No more items in loot.\n")
                 return
 
-            # showing loot content
-            print("\nLoot:\n") 
-            for item in looted_items:
-                print(" ---")
-                print(f"| {item} | {looted_items[item]}")
-                print(" ---")
+            # TODO make system for clearing console at e right time
+            os.system("clear")
+            self.show_items_loot(looted_items)
 
             number_or_discard = input("\nChoose item to keep (item number) or discard all/rest of items (d).\n> ")
 
@@ -101,10 +125,14 @@ class Backpack():
             else:
                 try:
                     number = int(number_or_discard)
-                    popped_item = looted_items.pop(number)
-                    self.add_item(popped_item) 
-                    # problem if option of removing items from backpack while looting is implemented:
-                    # if player tries to add item to a full bag, the item gets removed from loot (popped) either way
-                    # and may end the loop since there's no more items in loot to deal with
+                    self.add_item(looted_items[number])
+                    looted_items[number] = self.empty
                 except:
                     print("Invalid choice.\n")
+    
+    def empty_count(self, items):
+        count = 0
+        for item in items:
+            if items[item] is self.empty:
+                count += 1
+        return count
