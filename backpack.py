@@ -24,32 +24,35 @@ class Backpack():
     
     def remove_item(self):
         os.system("clear")
+        self.show_items_backpack()
 
         if self.empty_count(self.items) == len(self.items):
-            print("\nNo items in backpack.\n")
+            print("No items in backpack.\n")
             return
         
         try:
             item_number = int(input("\nItem to remove: \n> "))
             if self.items[item_number] is self.empty:
-                print("\nSelected slot is empty.\n")
+                print("Selected slot is empty.\n")
                 return
 
-            print(f"\n{self.items[item_number]} removed from backpack.\n")
+            temp = self.items[item_number]
             self.items[item_number] = self.empty
+            self.show_items_backpack()
+            print(f"{temp} removed from backpack.\n")
             self.available_backpack_space += 1
         except:
-            print("\nInvalid choice.\n")
+            print("Invalid choice.\n")
     
     def move_item(self):
         os.system("clear")
         self.show_items_backpack()
 
         while True:
-            item_to_move = int(input("\nChoose item to move (item number).\n> "))
+            item_to_move = int(input("Choose item to move (item number).\n> "))
             temp = self.items[item_to_move]
             if self.items[item_to_move] is not self.empty:
-                destination = int(input(f"\nChoose where to move item {item_to_move} (slot number).\n> "))
+                destination = int(input(f"Choose where to move item {item_to_move} (slot number).\n> "))
                 if self.items[destination] is self.empty:
                     self.items[destination] = self.items[item_to_move]
                     self.items[item_to_move] = self.empty
@@ -79,7 +82,7 @@ class Backpack():
                 return
 
     def show_items_loot(self, looted_items):
-        print("\nLoot:\n") 
+        print("\nLoot:\n")
         for item in looted_items:
             print(" ---")
             print(f"/ {item} / {looted_items[item]}")
@@ -89,7 +92,9 @@ class Backpack():
     def loot_to_add(self, looted_items):
         while True:
             if (self.available_backpack_space == 0) and (self.empty_count(looted_items) != len(looted_items)):
-                print("No more available space in the backpack.")
+                os.system("clear")
+                self.show_items_loot(looted_items)
+                print("No more available space in the backpack.\n")
                 
                 # TODO refine
                 replace_item = input("Replace item in backback with looted item?\ny/n> ")
@@ -102,21 +107,25 @@ class Backpack():
                     self.show_items_loot(looted_items)
                     replacing_item = int(input("Item to replace with:\n> "))
 
+                    temp_item_to_replace = self.items[item_to_replace]
+                    temp_replacing_item = looted_items[replacing_item]
                     self.replace_item(looted_items, item_to_replace, replacing_item)
+                    self.show_items_backpack()
+                    print(f"{temp_item_to_replace} replaced with {temp_replacing_item}.\n")
+                    return
 
                 if replace_item == "n":
-                    print("Loot discarded.")
+                    print("\nLoot discarded.\n")
                     return
+
+            os.system("clear")
+            self.show_items_loot(looted_items)
 
             if self.empty_count(looted_items) == len(looted_items):
                 print("No more items in loot.\n")
                 return
-
-            # TODO make system for clearing console at e right time
-            os.system("clear")
-            self.show_items_loot(looted_items)
-
-            number_or_discard = input("\nChoose item to keep (item number) or discard all/rest of items (d).\n> ")
+            
+            number_or_discard = input("Choose item to keep (item number) or discard all/rest of items (d).\n> ")
 
             if number_or_discard == "d":
                 print("\nItems discarded.\n")
