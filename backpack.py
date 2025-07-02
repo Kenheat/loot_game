@@ -19,9 +19,6 @@ class Backpack():
             print(" ---")
         print("")
     
-    def show_available_backpack_space(self):
-        print(f"Available backpack space: {self.available_backpack_space}")
-    
     def remove_item(self):
         os.system("clear")
         self.show_items_backpack()
@@ -68,7 +65,6 @@ class Backpack():
                 print("\nNo item in selected slot.\n")
                 return
 
-    # TODO refine
     def replace_item(self, looted_items, item_to_replace, replacing_item):
         self.items[item_to_replace] = looted_items[replacing_item]
         looted_items[replacing_item] = self.empty
@@ -91,27 +87,28 @@ class Backpack():
 
     def loot_to_add(self, looted_items):
         while True:
-            if (self.available_backpack_space == 0) and (self.empty_count(looted_items) != len(looted_items)):
+            while (self.available_backpack_space == 0) and (self.empty_count(looted_items) != len(looted_items)):
                 os.system("clear")
+                self.show_items_backpack()
                 self.show_items_loot(looted_items)
                 print("No more available space in the backpack.\n")
                 
-                # TODO refine
+                # TODO refine for invalid commands
                 replace_item = input("Replace item in backback with looted item?\ny/n> ")
                 if replace_item == "y":
                     os.system("clear")
                     self.show_items_backpack()
-                    item_to_replace = int(input("Item to replace:\n> "))
-
-                    os.system("clear")
                     self.show_items_loot(looted_items)
-                    replacing_item = int(input("Item to replace with:\n> "))
+                    item_to_replace = int(input("Item to replace in backpack:\n> "))
 
-                    temp_item_to_replace = self.items[item_to_replace]
-                    temp_replacing_item = looted_items[replacing_item]
+                    replacing_item = int(input("Replacing item from loot:\n> "))
+
                     self.replace_item(looted_items, item_to_replace, replacing_item)
                     self.show_items_backpack()
-                    print(f"{temp_item_to_replace} replaced with {temp_replacing_item}.\n")
+                
+                if self.empty_count(looted_items) == len(looted_items):
+                    self.show_items_loot(looted_items)
+                    print("No more items in loot.\n")
                     return
 
                 if replace_item == "n":
