@@ -26,7 +26,7 @@ def loot():
     # randomizing number of items and items in loot
     random_range_number = random.randrange(4)
     for i in range(random_range_number):
-        looted_items[i + 1] = (items[random.randrange(len(items))])
+        looted_items[str(i + 1)] = (items[random.randrange(len(items))])
 
     if len(looted_items) == 0:
         print("\nNo loot, try again!\n")
