@@ -3,9 +3,9 @@ import os
 class Backpack():
     def __init__(self):
         self.empty = "(Empty)"
-        self.items = {1: self.empty,
-                      2: self.empty,
-                      3: self.empty}
+        self.items = {"1": self.empty,
+                      "2": self.empty,
+                      "3": self.empty}
         self.max_backpack_space = len(self.items)
         self.available_backpack_space = len(self.items)
     
@@ -27,36 +27,39 @@ class Backpack():
             print("No items in backpack.\n")
             return
         
-        try:
-            item_number = int(input("\nItem to remove: \n> "))
-            if self.items[item_number] is self.empty:
-                print("Selected slot is empty.\n")
-                return
+        item_number = input("\nItem to remove: \n> ")
 
-            temp = self.items[item_number]
-            self.items[item_number] = self.empty
-            self.show_items_backpack()
-            print(f"{temp} removed from backpack.\n")
-            self.available_backpack_space += 1
-        except:
-            print("Invalid choice.\n")
-    
+        if item_number not in self.items:
+            print("Invalid item number.\n")
+            return
+
+        if self.items[item_number] is self.empty:
+            print("Selected slot is empty.\n")
+            return
+
+        temp_item = self.items[item_number]
+        self.items[item_number] = self.empty
+        self.show_items_backpack()
+        print(f"{temp_item} removed from backpack.\n")
+        self.available_backpack_space += 1
+        
     def move_item(self):
         os.system("clear")
         self.show_items_backpack()
 
+        # TODO add system for invalid commands
         while True:
-            item_to_move = int(input("Choose item to move (item number).\n> "))
-            temp = self.items[item_to_move]
+            item_to_move = input("Choose item to move (item number).\n> ")
+            temp_item = self.items[item_to_move]
             if self.items[item_to_move] is not self.empty:
-                destination = int(input(f"Choose where to move item {item_to_move} (slot number).\n> "))
+                destination = input(f"Choose where to move item {item_to_move} (slot number).\n> ")
                 if self.items[destination] is self.empty:
                     self.items[destination] = self.items[item_to_move]
                     self.items[item_to_move] = self.empty
                     
                     os.system("clear")
-                    print(f"\n{temp} moved from slot {item_to_move} to slot {destination}.\n")
                     self.show_items_backpack()
+                    print(f"{temp_item} moved from slot {item_to_move} to slot {destination}.\n")
                     return
                 else:
                     print("\nItem already in selected slot.\n")
@@ -93,15 +96,15 @@ class Backpack():
                 self.show_items_loot(looted_items)
                 print("No more available space in the backpack.\n")
                 
-                # TODO refine for invalid commands
+                # TODO add system for invalid commands
                 replace_item = input("Replace item in backback with looted item?\ny/n> ")
                 if replace_item == "y":
                     os.system("clear")
                     self.show_items_backpack()
                     self.show_items_loot(looted_items)
-                    item_to_replace = int(input("Item to replace in backpack:\n> "))
+                    item_to_replace = input("Item to replace in backpack:\n> ")
 
-                    replacing_item = int(input("Replacing item from loot:\n> "))
+                    replacing_item = input("Replacing item from loot:\n> ")
 
                     self.replace_item(looted_items, item_to_replace, replacing_item)
                     self.show_items_backpack()
@@ -128,13 +131,11 @@ class Backpack():
                 print("\nItems discarded.\n")
                 return
             
+            if number_or_discard not in looted_items:
+                print("Invalid item number.")
             else:
-                try:
-                    number = int(number_or_discard)
-                    self.add_item(looted_items[number])
-                    looted_items[number] = self.empty
-                except:
-                    print("Invalid choice.\n")
+                self.add_item(looted_items[number_or_discard])
+                looted_items[number_or_discard] = self.empty
     
     def empty_count(self, items):
         count = 0
