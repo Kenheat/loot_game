@@ -5,9 +5,13 @@ def main():
     start_message()
 
     bp = Backpack()
+    valid_commands = ["E", "H", "i", "r", "l", "m"]
 
     while True:
         user_input = input("> ")
+
+        if user_input not in valid_commands:
+            print('\nInvalid command, type "H" for help menu.\n')
 
         if user_input == "E":
             print("\nGoodbye!\n")
@@ -18,9 +22,6 @@ def main():
         
         if user_input == "i":
             bp.show_items_backpack()
-        
-        if user_input == "s":
-            bp.show_available_backpack_space()
 
         if user_input == "r":
             bp.remove_item()
