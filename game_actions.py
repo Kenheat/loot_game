@@ -13,7 +13,6 @@ def help():
     print("")
     print("E: exit game")
     print("i: show inventory")
-    print("s: show available backpack space")
     print("l: loot item")
     print("   <item number>: add chosen item to backpack")
     print("   d: discard looted item")
