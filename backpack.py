@@ -47,13 +47,30 @@ class Backpack():
         os.system("clear")
         self.show_items_backpack()
 
-        # TODO add system for invalid commands
         while True:
-            item_to_move = input("Choose item to move (item number).\n> ")
-            temp_item = self.items[item_to_move]
-            if self.items[item_to_move] is not self.empty:
-                destination = input(f"Choose where to move item {item_to_move} (slot number).\n> ")
+            item_to_move = input('Choose item to move (item number).\nType "a" to abort.\n> ')
+
+            if item_to_move == "a":
+                print("\nMoving of item aborted.\n")
+                return
+
+            if item_to_move not in self.items:
+                print("\nInvalid item number.\n")
+                continue
+
+            while self.items[item_to_move] is not self.empty:
+                destination = input(f'\nChoose where to move item {item_to_move} (slot number).\nType "a" to abort.\n> ')
+
+                if destination == "a":
+                    print("\nMoving of item aborted.\n")
+                    return
+                
+                if destination not in self.items:
+                    print("\nInvalid slot number.\n")
+                    continue
+
                 if self.items[destination] is self.empty:
+                    temp_item = self.items[item_to_move]
                     self.items[destination] = self.items[item_to_move]
                     self.items[item_to_move] = self.empty
                     
@@ -61,12 +78,19 @@ class Backpack():
                     self.show_items_backpack()
                     print(f"{temp_item} moved from slot {item_to_move} to slot {destination}.\n")
                     return
+                
                 else:
-                    print("\nItem already in selected slot.\n")
+                    temp_item_to_move = self.items[item_to_move]
+                    temp_item_destination = self.items[destination]
+
+                    self.items[destination] = self.items[item_to_move]
+                    self.items[item_to_move] = temp_item_destination
+                    self.show_items_backpack()
+                    print(f"{temp_item_to_move} switched with {temp_item_destination}.\n")
                     return
-            else:
+            
+            if self.items[item_to_move] is self.empty:
                 print("\nNo item in selected slot.\n")
-                return
 
     def replace_item(self, looted_items, item_to_replace, replacing_item):
         self.items[item_to_replace] = looted_items[replacing_item]
@@ -119,6 +143,7 @@ class Backpack():
                     return
 
             os.system("clear")
+            self.show_items_backpack()
             self.show_items_loot(looted_items)
 
             if self.empty_count(looted_items) == len(looted_items):
