@@ -3,6 +3,7 @@ import random
 class Sword():
     def __init__(self):
         self.item_type = "Weapon"
+        self.item_rarity = self.generate_item_rarity()
         self.name = self.generate_name()
     
     def generate_name(self):
@@ -12,6 +13,12 @@ class Sword():
 
         name = prefix[random.randrange(len(prefix))] + middle + suffix[random.randrange(len(suffix))]
         return name
+    
+    def generate_item_rarity(self):
+        rarity_tier = ["Common", "Uncommon", "Rare", "Epic"]
+
+        rarity = rarity_tier[random.randrange(len(rarity_tier))]
+        return rarity
     
     def __str__(self):
         return self.name
@@ -33,6 +40,7 @@ class Potion():
 class Chestpiece():
     def __init__(self):
         self.item_type = "Armor"
+        self.item_rarity = self.generate_item_rarity()
         self.name = self.generate_name()
     
     def generate_name(self):
@@ -40,6 +48,12 @@ class Chestpiece():
 
         name = "Chestplate of the " + suffix[random.randrange(len(suffix))]
         return name
+
+    def generate_item_rarity(self):
+        rarity_tier = ["Common", "Uncommon", "Rare", "Epic"]
+
+        rarity = rarity_tier[random.randrange(len(rarity_tier))]
+        return rarity
 
     def __str__(self):
         return self.name
