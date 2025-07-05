@@ -19,8 +19,15 @@ class Backpack():
             print(" ---")
         print("")
     
+    def show_items_loot(self, looted_items):
+        print("\nLoot:\n")
+        for item in looted_items:
+            print(" ---")
+            print(f"/ {item} / {looted_items[item]}")
+            print(" ---")
+        print("")
+    
     def remove_item(self):
-        os.system("clear")
         self.show_items_backpack()
 
         if self.empty_count(self.items) == len(self.items):
@@ -48,9 +55,7 @@ class Backpack():
             
             return
     
-    # TODO error system for when trying to move item to same slot
     def move_item(self):
-        os.system("clear")
         self.show_items_backpack()
 
         while True:
@@ -62,6 +67,10 @@ class Backpack():
             if self.invalid_command(item_to_move, self.items, "\nInvalid item number.\n"):
                 continue
 
+            if self.items[item_to_move] is self.empty:
+                print("\nNo item in selected slot.\n")
+                continue
+
             while self.items[item_to_move] is not self.empty:
                 destination = input(f'\nChoose where to move item {item_to_move} (slot number).\nType "a" to abort.\n> ')
 
@@ -70,35 +79,33 @@ class Backpack():
                 
                 if self.invalid_command(destination, self.items, "\nInvalid slot number."):
                     continue
+                    
+                if self.items[item_to_move] == self.items[destination]:
+                    print("\nCan't move item to same slot")
+                    continue
 
                 if self.items[destination] is self.empty:
                     temp_item = self.items[item_to_move]
                     self.items[destination] = self.items[item_to_move]
                     self.items[item_to_move] = self.empty
                     
-                    os.system("clear")
                     self.show_items_backpack()
                     print(f"{temp_item} moved from slot {item_to_move} to slot {destination}.\n")
                     return
                 
-                else:
-                    temp_item_to_move = self.items[item_to_move]
-                    temp_item_destination = self.items[destination]
+                temp_item_to_move = self.items[item_to_move]
+                temp_item_destination = self.items[destination]
 
-                    self.items[destination] = self.items[item_to_move]
-                    self.items[item_to_move] = temp_item_destination
-                    self.show_items_backpack()
-                    print(f"{temp_item_to_move} switched with {temp_item_destination}.\n")
-                    return
-            
-            if self.items[item_to_move] is self.empty:
-                print("\nNo item in selected slot.\n")
+                self.items[destination] = self.items[item_to_move]
+                self.items[item_to_move] = temp_item_destination
+                self.show_items_backpack()
+                print(f"{temp_item_to_move} switched with {temp_item_destination}.\n")
+                return
 
     def replace_item(self, looted_items, item_to_replace, replacing_item):
         self.items[item_to_replace] = looted_items[replacing_item]
         looted_items[replacing_item] = self.empty
     
-    # TODO add system for invalid commands
     def add_item(self, looted_item):
         for item in self.items:
             if self.items[item] is self.empty:
@@ -107,46 +114,53 @@ class Backpack():
                 self.available_backpack_space -= 1
                 return
 
-    def show_items_loot(self, looted_items):
-        print("\nLoot:\n")
-        for item in looted_items:
-            print(" ---")
-            print(f"/ {item} / {looted_items[item]}")
-            print(" ---")
-        print("")
-
     def loot_to_add(self, looted_items):
-        self.clear_and_show_inventory(looted_items)
+        self.show_all_inventory(looted_items)
 
         while True:
+
             while (self.available_backpack_space == 0) and (self.empty_count(looted_items) != len(looted_items)):
-                self.clear_and_show_inventory(looted_items)
+                self.show_all_inventory(looted_items)
                 
                 print("No more available space in the backpack.\n")
                 
-                replace_item = input("Replace item in backback with looted item?\ny/n> ")
+                while True:
+                    replace_item = input("Replace item in backback with looted item?\ny/n> ")
 
-                if self.invalid_command(replace_item, ["y", "n"], "\nInvalid command.\n"):
-                    continue
+                    if self.invalid_command(replace_item, ["y", "n"], "\nInvalid command.\n"):
+                        continue
 
-                if replace_item == "n":
-                    print("\nLoot discarded.\n")
-                    return
+                    if replace_item == "n":
+                        print("\nLoot discarded.\n")
+                        return
 
-                # TODO add system for invalid commands
-                if replace_item == "y":
-                    self.clear_and_show_inventory(looted_items)
+                    if replace_item == "y":
+                        self.show_all_inventory(looted_items)
+                        
+                        while True:
+                            item_to_replace = input('Item to replace in backpack:\nType "a" to abort.\n> ')
+                            if self.abort_action(item_to_replace, ""): # error message gets cleared immediately
+                                break
+                            if self.invalid_command(item_to_replace, self.items, "\nInvalid command.\n"):
+                                continue
+
+                            replacing_item = input('\nReplacing item from loot:\nType "a" to abort.\n> ')
+                            if self.abort_action(replacing_item, ""): # error message gets cleared immediately
+                                break
+                            if self.invalid_command(replacing_item, looted_items, "\nInvalid command.\n"):
+                                continue
+                            if looted_items[replacing_item] is self.empty:
+                                print("\nCan't replace item with empty slot.\n")
+                                continue
+
+                            self.replace_item(looted_items, item_to_replace, replacing_item)
+
+                            break
                     
-                    item_to_replace = input("Item to replace in backpack:\n> ")
-
-                    replacing_item = input("\nReplacing item from loot:\n> ")
-
-                    self.replace_item(looted_items, item_to_replace, replacing_item)
-
-                    continue
+                    break
 
             if self.empty_count(looted_items) == len(looted_items):
-                self.clear_and_show_inventory(looted_items)
+                self.show_all_inventory(looted_items)
                 print("No more items in loot.\n")
                 return
             
@@ -162,7 +176,7 @@ class Backpack():
             self.add_item(looted_items[number_or_discard])
             looted_items[number_or_discard] = self.empty
 
-            self.clear_and_show_inventory(looted_items)
+            self.show_all_inventory(looted_items)
     
     def empty_count(self, items):
         count = 0
@@ -176,8 +190,7 @@ class Backpack():
             print(error_message)
             return True
         
-    def clear_and_show_inventory(self, looted_items):
-        os.system("clear")
+    def show_all_inventory(self, looted_items):
         self.show_items_backpack()
         self.show_items_loot(looted_items)
 
