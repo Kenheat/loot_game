@@ -12,7 +12,7 @@ def start_message():
 def help():
     print("")
     print("E: exit game")
-    print("i: show inventory")
+    print("b: show backpack")
     print("l: loot item")
     print("   <item number>: add chosen item to backpack")
     print("   d: discard looted item")
