@@ -5,7 +5,7 @@ def main():
     start_message()
 
     bp = Backpack()
-    valid_commands = ["E", "H", "i", "r", "l", "m"]
+    valid_commands = ["E", "H", "b", "r", "l", "m"]
 
     while True:
         user_input = input("> ")
@@ -20,7 +20,7 @@ def main():
         if user_input == "H":
             help()
         
-        if user_input == "i":
+        if user_input == "b":
             bp.show_items_backpack()
 
         if user_input == "r":
