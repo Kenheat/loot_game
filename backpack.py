@@ -19,7 +19,7 @@ class Backpack():
             print(" ---")
         print("")
     
-    def show_items_loot(self, looted_items):
+    def _show_items_loot(self, looted_items):
         print("\nLoot:\n")
         for item in looted_items:
             print(" ---")
@@ -27,20 +27,24 @@ class Backpack():
             print(" ---")
         print("")
     
+    def _show_all_inventory(self, looted_items):
+        self.show_items_backpack()
+        self._show_items_loot(looted_items)
+    
     def remove_item(self):
         self.show_items_backpack()
 
-        if self.empty_count(self.items) == len(self.items):
+        if self._empty_count(self.items) == len(self.items):
             print("No items in backpack.\n")
             return
         
         while True:
             user_input = input('Choose item to remove (item number).\nType "a" to abort.\n> ')
 
-            if self.abort_action(user_input, "\nRemoval of item aborted.\n"):
+            if self._abort_action(user_input, "\nRemoval of item aborted.\n"):
                 return
 
-            if self.invalid_command(user_input, self.items, "\nInvalid item number.\n"):
+            if self._invalid_command(user_input, self.items, "\nInvalid item number.\n"):
                 continue
 
             if self.items[user_input] is self.empty:
@@ -61,10 +65,10 @@ class Backpack():
         while True:
             item_to_move = input('Choose item to move (item number).\nType "a" to abort.\n> ')
 
-            if self.abort_action(item_to_move, "\nMoving of item aborted.\n"):
+            if self._abort_action(item_to_move, "\nMoving of item aborted.\n"):
                 return
 
-            if self.invalid_command(item_to_move, self.items, "\nInvalid item number.\n"):
+            if self._invalid_command(item_to_move, self.items, "\nInvalid item number.\n"):
                 continue
 
             if self.items[item_to_move] is self.empty:
@@ -74,10 +78,10 @@ class Backpack():
             while self.items[item_to_move] is not self.empty:
                 destination = input(f'\nChoose where to move item {item_to_move} (slot number).\nType "a" to abort.\n> ')
 
-                if self.abort_action(destination, "\nMoving of item aborted.\n"):
+                if self._abort_action(destination, "\nMoving of item aborted.\n"):
                     return
                 
-                if self.invalid_command(destination, self.items, "\nInvalid slot number."):
+                if self._invalid_command(destination, self.items, "\nInvalid slot number."):
                     continue
                     
                 if self.items[item_to_move] == self.items[destination]:
@@ -102,11 +106,11 @@ class Backpack():
                 print(f"{temp_item_to_move} switched with {temp_item_destination}.\n")
                 return
 
-    def replace_item(self, looted_items, item_to_replace, replacing_item):
+    def _replace_item(self, looted_items, item_to_replace, replacing_item):
         self.items[item_to_replace] = looted_items[replacing_item]
         looted_items[replacing_item] = self.empty
     
-    def add_item(self, looted_item):
+    def _add_item(self, looted_item):
         for item in self.items:
             if self.items[item] is self.empty:
                 self.items[item] = looted_item
@@ -115,52 +119,52 @@ class Backpack():
                 return
 
     def loot_to_add(self, looted_items):
-        self.show_all_inventory(looted_items)
+        self._show_all_inventory(looted_items)
 
         while True:
 
-            while (self.available_backpack_space == 0) and (self.empty_count(looted_items) != len(looted_items)):
-                self.show_all_inventory(looted_items)
+            while (self.available_backpack_space == 0) and (self._empty_count(looted_items) != len(looted_items)):
+                self._show_all_inventory(looted_items)
                 
                 print("No more available space in the backpack.\n")
                 
                 while True:
-                    replace_item = input("Replace item in backback with looted item?\ny/n> ")
+                    yes_or_no = input("Replace item in backback with looted item?\ny/n> ")
 
-                    if self.invalid_command(replace_item, ["y", "n"], "\nInvalid command.\n"):
+                    if self._invalid_command(yes_or_no, ["y", "n"], "\nInvalid command.\n"):
                         continue
 
-                    if replace_item == "n":
+                    if yes_or_no == "n":
                         print("\nLoot discarded.\n")
                         return
 
-                    if replace_item == "y":
-                        self.show_all_inventory(looted_items)
+                    if yes_or_no == "y":
+                        self._show_all_inventory(looted_items)
                         
                         while True:
                             item_to_replace = input('Item to replace in backpack:\nType "a" to abort.\n> ')
-                            if self.abort_action(item_to_replace, ""): # error message gets cleared immediately
+                            if self._abort_action(item_to_replace, ""): # error message gets cleared immediately
                                 break
-                            if self.invalid_command(item_to_replace, self.items, "\nInvalid command.\n"):
+                            if self._invalid_command(item_to_replace, self.items, "\nInvalid command.\n"):
                                 continue
 
                             replacing_item = input('\nReplacing item from loot:\nType "a" to abort.\n> ')
-                            if self.abort_action(replacing_item, ""): # error message gets cleared immediately
+                            if self._abort_action(replacing_item, ""): # error message gets cleared immediately
                                 break
-                            if self.invalid_command(replacing_item, looted_items, "\nInvalid command.\n"):
+                            if self._invalid_command(replacing_item, looted_items, "\nInvalid command.\n"):
                                 continue
                             if looted_items[replacing_item] is self.empty:
                                 print("\nCan't replace item with empty slot.\n")
                                 continue
 
-                            self.replace_item(looted_items, item_to_replace, replacing_item)
+                            self._replace_item(looted_items, item_to_replace, replacing_item)
 
                             break
                     
                     break
 
-            if self.empty_count(looted_items) == len(looted_items):
-                self.show_all_inventory(looted_items)
+            if self._empty_count(looted_items) == len(looted_items):
+                self._show_all_inventory(looted_items)
                 print("No more items in loot.\n")
                 return
             
@@ -170,31 +174,27 @@ class Backpack():
                 print("\nItems discarded.\n")
                 return
             
-            if self.invalid_command(number_or_discard, looted_items, "\nInvalid item number.\n"):
+            if self._invalid_command(number_or_discard, looted_items, "\nInvalid item number.\n"):
                 continue
 
-            self.add_item(looted_items[number_or_discard])
+            self._add_item(looted_items[number_or_discard])
             looted_items[number_or_discard] = self.empty
 
-            self.show_all_inventory(looted_items)
+            self._show_all_inventory(looted_items)
     
-    def empty_count(self, items):
+    def _empty_count(self, items):
         count = 0
         for item in items:
             if items[item] is self.empty:
                 count += 1
         return count
 
-    def invalid_command(self, item_to_check, what_to_check, error_message):
+    def _invalid_command(self, item_to_check, what_to_check, error_message):
         if item_to_check not in what_to_check:
             print(error_message)
             return True
-        
-    def show_all_inventory(self, looted_items):
-        self.show_items_backpack()
-        self.show_items_loot(looted_items)
 
-    def abort_action(self, user_input, abort_message):
+    def _abort_action(self, user_input, abort_message):
         if user_input == "a":
             print(abort_message)
             return True
